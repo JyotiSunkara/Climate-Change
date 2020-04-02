@@ -1,18 +1,86 @@
 <!-- Code from d3-graph-gallery.com -->
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
+  .axis .domain {
+  display: none;
+}
+.slidecontainer 
+{
+  width: 100%;
+}
 
+.slider 
+{
+  -webkit-appearance: none;
+  width: 30%;
+  height: 15px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover 
+{
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb 
+{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background:grey;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb 
+{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: grey;
+  cursor: pointer;
+}
+
+body 
+{ 
+  text-align: center;       
+  padding: 5%; 
+} 
+
+</style>
 <!-- Load d3.js and the geo projection plugin -->
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
+<body>
+    <h1>Climate Change</h1>
+    <p>Drag the slider to change the year.</p>
+  
+    <div class="slidecontainer">
+      <input type="range" min="1970" max="2020" value="1970" class="slider" id="myRange">
+      <p>Year: <span id="demo">1970</span></p>
+    </div>
 <!-- Create an element where the map will take place -->
-<br>
 <svg id="my_dataviz" width="1130" height="550"></svg>
-
+</body>
 
 <script>
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+console.log("here")
+slider.oninput = function() 
+{
+  output.innerHTML = (this.value);
+}
 
 // The svg
 var svg = d3.select("svg"),
