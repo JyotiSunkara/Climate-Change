@@ -8,7 +8,8 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <!-- Create an element where the map will take place -->
-<svg id="my_dataviz" width="630" height="350"></svg>
+<br>
+<svg id="my_dataviz" width="1130" height="550"></svg>
 
 
 <script>
@@ -20,13 +21,13 @@ var svg = d3.select("svg"),
 
 // Map and projection
 var projection = d3.geoMercator()
-    .center([0,20])                // GPS of location to zoom on
-    .scale(99)                       // This is like the zoom
+    .center([0,50])                // GPS of location to zoom on
+    .scale(125)                       // This is like the zoom
     .translate([ width/2, height/2 ])
 
 d3.queue()
-  .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")  // World shape
-  .defer(d3.csv, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_gpsLocSurfer.csv") // Position of circles
+  .defer(d3.json, "world.geojson")  // World shape
+  .defer(d3.csv, "data_gpsLocSurfer.csv") // Position of circles
   .await(ready);
 
 function ready(error, dataGeo, data) {
@@ -64,7 +65,7 @@ function ready(error, dataGeo, data) {
     .append("circle")
       .attr("cx", function(d){ return projection([+d.homelon, +d.homelat])[0] })
       .attr("cy", function(d){ return projection([+d.homelon, +d.homelat])[1] })
-      .attr("r", function(d){ return size(+d.n) })
+      .attr("r", function(d){ return size(50) })
       .style("fill", function(d){ return color(d.homecontinent) })
       .attr("stroke", function(d){ if(d.n>2000){return "black"}else{return "none"}  })
       .attr("stroke-width", 1)
@@ -72,36 +73,36 @@ function ready(error, dataGeo, data) {
 
 
 
-  // Add title and explanation
-  svg
-    .append("text")
-      .attr("text-anchor", "end")
-      .style("fill", "black")
-      .attr("x", width - 10)
-      .attr("y", height - 30)
-      .attr("width", 90)
-      .html("WHERE SURFERS LIVE")
-      .style("font-size", 14)
+  // // Add title and explanation
+  // svg
+  //   .append("text")
+  //     .attr("text-anchor", "end")
+  //     .style("fill", "black")
+  //     .attr("x", width - 10)
+  //     .attr("y", height - 30)
+  //     .attr("width", 90)
+  //     .html("WHERE SURFERS LIVE")
+  //     .style("font-size", 14)
 
 
-  // --------------- //
-  // ADD LEGEND //
-  // --------------- //
+  // // --------------- //
+  // // ADD LEGEND //
+  // // --------------- //
 
-  // Add legend: circles
-  var valuesToShow = [100,4000,15000]
-  var xCircle = 40
-  var xLabel = 90
-  svg
-    .selectAll("legend")
-    .data(valuesToShow)
-    .enter()
-    .append("circle")
-      .attr("cx", xCircle)
-      .attr("cy", function(d){ return height - size(d) } )
-      .attr("r", function(d){ return size(d) })
-      .style("fill", "none")
-      .attr("stroke", "black")
+  // // Add legend: circles
+  // var valuesToShow = [100,4000,15000]
+  // var xCircle = 40
+  // var xLabel = 90
+  // svg
+  //   .selectAll("legend")
+  //   .data(valuesToShow)
+  //   .enter()
+  //   .append("circle")
+  //     .attr("cx", xCircle)
+  //     .attr("cy", function(d){ return height - size(d) } )
+  //     .attr("r", function(d){ return size(d) })
+  //     .style("fill", "none")
+  //     .attr("stroke", "black")
 
   // Add legend: segments
   svg
