@@ -78,6 +78,10 @@
 
 <script>
 // The svg
+var data_row = 0;
+var start = 0;
+var end = 0
+var flag = "NULL"
 var svg = d3.select("#my_dataviz"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -121,13 +125,14 @@ function ready(error, dataGeo, data) {
       .style("opacity", .3)
 
   // Add circles:
-  function add(plot_date)
-  { svg.selectAll("myCircles")
-    .data(data.filter(function(d,i){ return d.date == plot_date }))
+  function add(starting,ending)
+  { 
+    var temp = data.slice(starting ,ending)
+    svg.selectAll("myCircles")
+    .data(temp)
     .enter()
     .append("circle")
       .attr("cx", function(d){ 
-        console.log(d)
         return projection([+d.longitude, +d.latitude])[0] })
       .attr("cy", function(d){ return projection([+d.longitude, +d.latitude])[1] })
       .style("opacity",1)
@@ -138,7 +143,7 @@ function ready(error, dataGeo, data) {
           return "red"
         })
       .transition()
-      .duration(2000)
+      .duration(1000)
       .attr("r", function(d){ return 5 })
       .style("opacity",0)
   }
@@ -218,10 +223,6 @@ var label = slider.append("text")
  
 ////////// plot //////////
 
-var dataset;
-
-d3.csv("circles.csv", prepare, function(data) {
-  dataset = data;
   
   playButton
     .on("click", function() {
@@ -233,12 +234,11 @@ d3.csv("circles.csv", prepare, function(data) {
       button.text("Play");
     } else {
       moving = true;
-      timer = setInterval(step, 3);
+      timer = setInterval(step, 75);
       button.text("Pause");
     }
     console.log("Slider moving: " + moving);
   })
-})
 
 function prepare(d) {
   d.id = d.id;
@@ -266,14 +266,15 @@ function update(h) {
   label
     .attr("x", x(h))
     .text(()=>{
-        console.log(reqDate(h))
-        add(reqDate(h))
+        if(reqDate(h) == data[data_row]["date"])
+        {
+          start = data_row
+          while(reqDate(h) == data[data_row]["date"])
+            data_row += 1
+          end = data_row
+          add(start,end)
+        }
         return formatDate(h)});
-
-  // filter data set and redraw plot
-  var newData = dataset.filter(function(d) {
-    return d.date < h;
-  })
 }
 
   //     svg.call(d3.zoom()
