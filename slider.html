@@ -74,25 +74,26 @@
 
 var formatDateIntoYear = d3.timeFormat("%Y");
 var formatDate = d3.timeFormat("%b %Y");
+var reqDate = d3.timeFormat("%d/%m/%Y");
 var parseDate = d3.timeParse("%m/%d/%y");
 
 var startDate = new Date("1970-01-01"),
     endDate = new Date("2020-01-01");
 
-var margin = {top:50, right:50, bottom:0, left:50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+var margin2 = {top:50, right:50, bottom:0, left:50},
+    width2 = 960 - margin2.left - margin2.right,
+    height2 = 500 - margin2.top - margin2.bottom;
 
-var svg = d3.select("#vis")
+var svg2 = d3.select("#vis")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);  
+    .attr("width", width2 + margin2.left + margin2.right)
+    .attr("height", height2 + margin2.top + margin2.bottom);  
 
 ////////// slider //////////
 
 var moving = false;
 var currentValue = 0;
-var targetValue = width;
+var targetValue = width2;
 
 var playButton = d3.select("#play-button");
     
@@ -101,9 +102,9 @@ var x = d3.scaleTime()
     .range([0, targetValue])
     .clamp(true);
 
-var slider = svg.append("g")
+var slider = svg2.append("g")
     .attr("class", "slider")
-    .attr("transform", "translate(" + margin.left + "," + height/5 + ")");
+    .attr("transform", "translate(" + margin2.left + "," + height2/5 + ")");
 
 slider.append("line")
     .attr("class", "track")
@@ -147,10 +148,6 @@ var label = slider.append("text")
 ////////// plot //////////
 
 var dataset;
-
-var plot = svg.append("g")
-    .attr("class", "plot")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("circles.csv", prepare, function(data) {
   dataset = data;
@@ -198,7 +195,7 @@ function update(h) {
   label
     .attr("x", x(h))
     .text(()=>{
-        console.log(h)
+        // console.log(reqDate(h))
         return formatDate(h)});
 
   // filter data set and redraw plot

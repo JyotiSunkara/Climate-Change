@@ -69,14 +69,14 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <body>
-
+  <div id="vis">
+    <button id="play-button">Play</button>
+  </div>
 <!-- Create an element where the map will take place -->
 <svg id="my_dataviz" width="1130" height="550"></svg>
 </body>
 
 <script>
-
-
 // The svg
 var svg = d3.select("#my_dataviz"),
     width = +svg.attr("width"),
@@ -142,7 +142,139 @@ function ready(error, dataGeo, data) {
       .attr("r", function(d){ return 5 })
       .style("opacity",0)
   }
-    add("2013/08/07")
+
+  var formatDateIntoYear = d3.timeFormat("%Y");
+var formatDate = d3.timeFormat("%b %Y");
+var reqDate = d3.timeFormat("%Y/%m/%d");
+var parseDate = d3.timeParse("%m/%d/%y");
+
+var startDate = new Date("1970-01-01"),
+    endDate = new Date("2020-01-01");
+
+var margin2 = {top:50, right:50, bottom:0, left:50},
+    width2 = 960 - margin2.left - margin2.right,
+    height2 = 220 - margin2.top - margin2.bottom;
+
+var svg2 = d3.select("#vis")
+    .append("svg")
+    .attr("width", width2 + margin2.left + margin2.right)
+    .attr("height", height2 + margin2.top + margin2.bottom);  
+
+////////// slider //////////
+
+var moving = false;
+var currentValue = 0;
+var targetValue = width2;
+
+var playButton = d3.select("#play-button");
+    
+var x = d3.scaleTime()
+    .domain([startDate, endDate])
+    .range([0, targetValue])
+    .clamp(true);
+
+var slider = svg2.append("g")
+    .attr("class", "slider")
+    .attr("transform", "translate(" + margin2.left + "," + height2/5 + ")");
+
+slider.append("line")
+    .attr("class", "track")
+    .attr("x1", x.range()[0])
+    .attr("x2", x.range()[1])
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-inset")
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-overlay")
+    .call(d3.drag()
+        .on("start.interrupt", function() { slider.interrupt(); })
+        .on("start drag", function() {
+          currentValue = d3.event.x;
+          update(x.invert(currentValue)); 
+        })
+    );
+
+slider.insert("g", ".track-overlay")
+    .attr("class", "ticks")
+    .attr("transform", "translate(0," + 18 + ")")
+  .selectAll("text")
+    .data(x.ticks(10))
+    .enter()
+    .append("text")
+    .attr("x", x)
+    .attr("y", 10)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return formatDateIntoYear(d); });
+
+var handle = slider.insert("circle", ".track-overlay")
+    .attr("class", "handle")
+    .attr("r", 9);
+
+var label = slider.append("text")  
+    .attr("class", "label")
+    .attr("text-anchor", "middle")
+    .text(formatDate(startDate))
+    .attr("transform", "translate(0," + (-25) + ")")
+
+ 
+////////// plot //////////
+
+var dataset;
+
+d3.csv("circles.csv", prepare, function(data) {
+  dataset = data;
+  
+  playButton
+    .on("click", function() {
+    var button = d3.select(this);
+    if (button.text() == "Pause") {
+      moving = false;
+      clearInterval(timer);
+      // timer = 0;
+      button.text("Play");
+    } else {
+      moving = true;
+      timer = setInterval(step, 3);
+      button.text("Pause");
+    }
+    console.log("Slider moving: " + moving);
+  })
+})
+
+function prepare(d) {
+  d.id = d.id;
+  d.date = parseDate(d.date);
+  return d;
+}
+  
+function step() {
+  update(x.invert(currentValue));
+  currentValue = currentValue + (targetValue/18263);
+  if (currentValue > targetValue) {
+    moving = false;
+    currentValue = 0;
+    clearInterval(timer);
+    // timer = 0;
+    playButton.text("Play");
+    console.log("Slider moving: " + moving);
+  }
+}
+
+
+function update(h) {
+  // update position and text of label according to slider scale
+  handle.attr("cx", x(h));
+  label
+    .attr("x", x(h))
+    .text(()=>{
+        console.log(reqDate(h))
+        add(reqDate(h))
+        return formatDate(h)});
+
+  // filter data set and redraw plot
+  var newData = dataset.filter(function(d) {
+    return d.date < h;
+  })
+}
 
   //     svg.call(d3.zoom()
   //     .extent([[0, 0], [width, height]])
