@@ -266,6 +266,30 @@ function update(h) {
   label
     .attr("x", x(h))
     .text(()=>{
+        if(reqDate(h) != data[data_row]["date"])
+        {
+          SliderDate = new Date(reqDate(h).slice(0,4),reqDate(h).slice(5,7),reqDate(h).slice(8,10));
+          DataDate = new Date(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
+
+          if(DataDate < SliderDate)
+          {
+            while(DataDate < SliderDate)
+            { 
+              data_row += 1;
+              DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
+            }
+          }
+          else if(DataDate > SliderDate)
+          {
+            while(DataDate >= SliderDate)
+            {
+              data_row -= 1;
+              DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
+            }
+            data_row += 1
+
+          }
+        }
         if(reqDate(h) == data[data_row]["date"])
         {
           start = data_row
