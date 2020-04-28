@@ -81,21 +81,21 @@ d3.csv("years.csv",function(data) {
       .attr("text-anchor", "left")
       .attr("alignment-baseline", "middle")
   
-  var focus3 = svg
-    .append('g')
-    .append('circle')
-      .style("fill", "none")
-      .attr("stroke", "black")
-      .attr('r', 2.5)
-      .style("opacity", 0)
+  // var focus3 = svg
+  //   .append('g')
+  //   .append('circle')
+  //     .style("fill", "none")
+  //     .attr("stroke", "black")
+  //     .attr('r', 2.5)
+  //     .style("opacity", 0)
 
-  // Create the text that travels along the curve of chart
-  var focusText3 = svg
-    .append('g')
-    .append('text')
-      .style("opacity", 0)
-      .attr("text-anchor", "left")
-      .attr("alignment-baseline", "middle")
+  // // Create the text that travels along the curve of chart
+  // var focusText3 = svg
+  //   .append('g')
+  //   .append('text')
+  //     .style("opacity", 0)
+  //     .attr("text-anchor", "left")
+  //     .attr("alignment-baseline", "middle")
 
   // Create a rect on top of the svg area: this rectangle recovers mouse position
   svg
@@ -131,16 +131,16 @@ d3.csv("years.csv",function(data) {
       .y(function(d) { return y(parseInt(d.min)) })
       )
   
-  svg
-    .append("path")
-    .datum(data)
-    .attr("fill", "none")
-    .attr("stroke", "purple")
-    .attr("stroke-width", 1.5)
-    .attr("d", d3.line()
-      .x(function(d) { return x(parseInt(d.year) + 1970) })
-      .y(function(d) { return y(parseInt(d.min) + parseInt(d.max)) })
-      )
+  // svg
+  //   .append("path")
+  //   .datum(data)
+  //   .attr("fill", "none")
+  //   .attr("stroke", "purple")
+  //   .attr("stroke-width", 1.5)
+  //   .attr("d", d3.line()
+  //     .x(function(d) { return x(parseInt(d.year) + 1970) })
+  //     .y(function(d) { return y(parseInt(d.min) + parseInt(d.max)) })
+  //     )
 
 
   // What happens when the mouse move -> show the annotations at the right positions.
@@ -174,13 +174,13 @@ d3.csv("years.csv",function(data) {
       .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "min:" + parseInt(selectedData.min))
       .attr("x", x(parseInt(selectedData.year) + 1970)+15)
       .attr("y", y(parseInt(selectedData.min)))
-    focus3
-      .attr("cx", x(parseInt(selectedData.year) + 1970))
-      .attr("cy", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
-    focusText3
-      .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "total:" + (parseInt(selectedData.min) + parseInt(selectedData.max)))
-      .attr("x", x(parseInt(selectedData.year) + 1970)+15)
-      .attr("y", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
+    // focus3
+    //   .attr("cx", x(parseInt(selectedData.year) + 1970))
+    //   .attr("cy", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
+    // focusText3
+    //   .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "total:" + (parseInt(selectedData.min) + parseInt(selectedData.max)))
+    //   .attr("x", x(parseInt(selectedData.year) + 1970)+15)
+    //   .attr("y", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
 }
   
   function mouseout() {
@@ -188,8 +188,8 @@ d3.csv("years.csv",function(data) {
     focusText.style("opacity", 0)
     focus2.style("opacity", 0)
     focusText2.style("opacity", 0)
-    focus3.style("opacity", 0)
-    focusText3.style("opacity", 0)
+    // focus3.style("opacity", 0)
+    // focusText3.style("opacity", 0)
   }
 
 })

@@ -148,7 +148,7 @@ function ready(error, dataGeo, data) {
       .remove()
   }
 
-  var formatDateIntoYear = d3.timeFormat("%Y");
+var formatDateIntoYear = d3.timeFormat("%Y");
 var formatDate = d3.timeFormat("%b %Y");
 var reqDate = d3.timeFormat("%Y/%m/%d");
 var parseDate = d3.timeParse("%m/%d/%y");
@@ -222,7 +222,6 @@ var label = slider.append("text")
 
  
 ////////// plot //////////
-
   
   playButton
     .on("click", function() {
