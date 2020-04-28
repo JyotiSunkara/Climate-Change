@@ -11,11 +11,57 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<style>
+    select {
+        width: 140px;
+        height: 35px;
+        padding: 4px;
+        border-radius:3px;
+        box-shadow: 2px 2px 8px #999;
+        background: #eee;
+        border: none;
+        outline: none;
+        display: inline-block;
+        -webkit-appearance:none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: pointer;
+    }
+    label {
+    position: relative;
+    }
+    label:after {
+        content:'<>';
+        font: 11px "Consolas", monospace;
+        color: #666;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+        right: 8px; 
+        top:2px;
+        padding: 0 0 2px;
+        border-bottom: 1px solid #ddd;
+        position: absolute;
+        pointer-events: none;
+    }
+    label:before {
+        content: '';
+        right: 6px; 
+        top:0px;
+        width: 20px; 
+        height: 20px;
+        background: #eee;
+        position: absolute;
+        pointer-events: none;
+        display: block;
+    }
+  </style>
 <script>
 $(function () {
     var bindDatePicker = function() {
          $(".date").datetimepicker({
-         format:'YYYY-MM-DD',
+         format:'YYYY/MM/DD',
              icons: {
                  time: "fa fa-clock-o",
                  date: "fa fa-calendar",
@@ -29,7 +75,7 @@ $(function () {
  
              if (! isValidDate(date)) {
                  //create date based on momentjs (we have that)
-                 date = moment().format('YYYY-MM-DD');
+                 date = moment().format('YYYY/MM/DD');
              }
  
              $(this).val(date);
@@ -61,11 +107,35 @@ $(function () {
 </script>
 
 
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script>
+    d3.csv("CSV/dummy.csv", function(error, data) {
+      var select = d3.select(".dropdead")
+        .append("div")
+        .append("label")
+        .append("select")
+  
+      select
+        .on("change", function(d) {
+          var value = d3.select(this).property("value");
+          alert(value);
+        });
+  
+      select.selectAll("option")
+        .data(data)
+        .enter()
+          .append("option")
+          .attr("value", function (d) { return d.code; })
+          .text(function (d) { return d.city; });
+    });
+    </script>
 
 
+<body>
 <div class="container">
     <div class="row">
-      Date formats: yyyy-mm-dd, yyyymmdd, dd-mm-yyyy, dd/mm/yyyy, ddmmyyyyy
+    <!-- Date formats: yyyy-mm-dd, yyyymmdd, dd-mm-yyyy, dd/mm/yyyy, ddmmyyyyy -->
+    <i> Select the date from the calendar below!</i>
     </div>
     <br />
       <div class="row">
@@ -79,5 +149,10 @@ $(function () {
               </div>
           </div>
       </div>
+      <div class="row">
+        <div class='col-md-5'>
+        <div class="dropdead"></div>
+        </div>
+    </div>
 </div>
-
+</body>
