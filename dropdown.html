@@ -56,9 +56,11 @@
         pointer-events: none;
         display: block;
     }
-  </style>
+</style>
+
+<!------------------------------------ Datepicker ---------------------------------------->
 <script>
-$(function () {
+    $(function () {
     var bindDatePicker = function() {
          $(".date").datetimepicker({
          format:'YYYY/MM/DD',
@@ -104,11 +106,12 @@ $(function () {
     
     bindDatePicker();
   });
+
 </script>
 
-
-    <script src="http://d3js.org/d3.v3.js"></script>
-    <script>
+<!------------------------------------ Dropdown ---------------------------------------->
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
     d3.csv("CSV/dummy.csv", function(error, data) {
       var select = d3.select(".dropdead")
         .append("div")
@@ -130,14 +133,78 @@ $(function () {
     });
     </script>
 
+<!------------------------------------ Donuts ---------------------------------------->
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
 
+<script type = "text/javascript">
+    window.onload = function () {
+      var chartOne = new CanvasJS.Chart("chartContainerOne",
+      {
+          animationEnabled: true,
+        title:{
+          text: "Maximum", 
+          horizontalAlign: "left"     
+        },
+        data: [
+        {        
+          type: "doughnut",
+          indexLabelPlacement: "outside",        
+          radius: "100%",  //change the radius here. 
+          innerRadius: 60,
+          indexLabelFontSize: 17,
+          indexLabel: "{label} - #percent%",
+          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          dataPoints: [
+            { y: 100, label: "first", color: "gold"},
+            { y: 55, label: "second", color: "yellow"}
+          ]
+        }
+        ]
+      });
+  
+      chartOne.render();
+      
+      var chartTwo = new CanvasJS.Chart("chartContainerTwo",
+      {
+          animationEnabled: true,
+        title:{
+          text: "Minimum", 
+          horizontalAlign: "left"     
+        },
+        data: [
+        {        
+          type: "doughnut",
+          indexLabelPlacement: "outside",        
+          radius: "100%",  //change the radius here. 
+          innerRadius: 60,
+          indexLabelFontSize: 17,
+          indexLabel: "{label} - #percent%",
+          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          dataPoints: [
+            {  y: 71, label: "first", color: "aqua"},
+            {  y: 55, label: "second", color: "dodgerblue"},
+          ]
+        }
+        ]
+      });
+  
+      chartTwo.render();
+    }
+
+
+</script>
 <body>
+<div id="chartContainerOne"  style="height: 300px; width: 500px; display: inline-block;">
+    </div>
+<div id="chartContainerTwo"  style="height: 300px; width: 500px; display: inline-block;">
+    </div>
 <div class="container">
     <div class="row">
     <!-- Date formats: yyyy-mm-dd, yyyymmdd, dd-mm-yyyy, dd/mm/yyyy, ddmmyyyyy -->
     <i> Select the date from the calendar below!</i>
     </div>
     <br />
+
       <div class="row">
           <div class='col-sm-3'>
               <div class="form-group">
@@ -149,10 +216,9 @@ $(function () {
               </div>
           </div>
       </div>
-      <div class="row">
-        <div class='col-md-5'>
-        <div class="dropdead"></div>
-        </div>
-    </div>
+    <div class="dropdead" style="display: inline-block;"></div>
+
+    
+        
 </div>
 </body>
