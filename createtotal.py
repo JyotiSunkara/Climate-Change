@@ -4,6 +4,8 @@ from csv import reader
 # Open the input_file in read mode and output_file in write mode
 sumMin = 0
 sumMax = 0 
+firstMin = 0
+firstMax = 0
 index = 0
 with open('years.csv', 'r') as read_obj, \
         open('totals.csv', 'w', newline='') as write_obj:
@@ -16,9 +18,10 @@ with open('years.csv', 'r') as read_obj, \
         # Append the default text in the row / list
         if (index == 0):
             new_row = row
+
         else:
-            sumMin += int(row[2])
-            sumMax += int(row[1])
+            sumMin += int(row[2]) - firstMax
+            sumMax += int(row[1]) - firstMin
             new_row = (row[0], sumMax, sumMin)
             # print(row[1])
 
