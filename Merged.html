@@ -94,7 +94,7 @@ var projection = d3.geoMercator()
 
 d3.queue()
   .defer(d3.json, "world.geojson")  // World shape
-  .defer(d3.csv, "final-data.csv") // Position of circles
+  .defer(d3.csv, "CSV/final-data.csv") // Position of circles
   .await(ready);
 
 function ready(error, dataGeo, data) {
