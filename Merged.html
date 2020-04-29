@@ -73,7 +73,9 @@
     <button id="play-button">Play</button>
   </div>
 <!-- Create an element where the map will take place -->
+<div id="data">
 <svg id="my_dataviz" width="1130" height="550"></svg>
+</div>
 </body>
 
 <script>
@@ -99,7 +101,7 @@ d3.queue()
 
 function ready(error, dataGeo, data) {
 
-  console.log(data)
+  // console.log(data)
   var allContinent = d3.map(data, function(d){return(d.homecontinent)}).keys()
   var color = d3.scaleOrdinal()
     .domain(allContinent)
@@ -125,6 +127,12 @@ function ready(error, dataGeo, data) {
       .style("opacity", .3)
 
   // Add circles:
+  function rem()
+  {
+    // console.log("temp")
+    svg.selectAll("circle").remove()
+  }
+
   function add(starting,ending)
   { 
     var temp = data.slice(starting ,ending)
@@ -146,6 +154,43 @@ function ready(error, dataGeo, data) {
       .duration(1000)
       .attr("r", function(d){ return 5 })
       .remove()
+
+  }
+
+  var tooltip = d3.select("#my_dataviz")
+    .append("rect")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px")
+  
+  function tempadd(starting,ending)
+  { 
+    var temp = data.slice(starting ,ending)
+    svg.selectAll("myCircles")
+    .data(temp)
+    .enter()
+    .append("circle")
+      .attr("cx", function(d){ 
+        return projection([+d.longitude, +d.latitude])[0] })
+      .attr("cy", function(d){ return projection([+d.longitude, +d.latitude])[1] })
+      .style("opacity",0.6)
+      .style("fill", function(d){ 
+        if(d.category == "min")
+          return "cyan" 
+        else
+          return "red"
+        })
+      .transition()
+      .attr("r", function(d){ return 5 })
+      
+      svg.selectAll("circle").append("svg:title")
+          .text(function(d, i) { 
+            return "Code: " + d.code + "\n" + "Temperature: " + d.temperature});
+    
   }
 
 var formatDateIntoYear = d3.timeFormat("%Y");
@@ -194,7 +239,12 @@ slider.append("line")
         .on("start.interrupt", function() { slider.interrupt(); })
         .on("start drag", function() {
           currentValue = d3.event.x;
-          update(x.invert(currentValue)); 
+          console.log("2")
+          rem()
+          if(moving == false)
+            update(x.invert(currentValue),1);
+          if(moving == true)
+            update(x.invert(currentValue)); 
         })
     );
 
@@ -217,7 +267,7 @@ var handle = slider.insert("circle", ".track-overlay")
 var label = slider.append("text")  
     .attr("class", "label")
     .attr("text-anchor", "middle")
-    .text(formatDate(startDate))
+    .text(reqDate(startDate))
     .attr("transform", "translate(0," + (-25) + ")")
 
  
@@ -231,7 +281,10 @@ var label = slider.append("text")
       clearInterval(timer);
       // timer = 0;
       button.text("Play");
+      console.log("1")
+      update(x.invert(currentValue),1);
     } else {
+      rem()
       moving = true;
       timer = setInterval(step, 75);
       button.text("Pause");
@@ -246,6 +299,7 @@ function prepare(d) {
 }
   
 function step() {
+  console.log("3")
   update(x.invert(currentValue));
   currentValue = currentValue + (targetValue/18263);
   if (currentValue > targetValue) {
@@ -255,49 +309,57 @@ function step() {
     // timer = 0;
     playButton.text("Play");
     console.log("Slider moving: " + moving);
+    console.log("special")
   }
 }
 
+function datasplit(h,mode = 0)
+{
+  if(reqDate(h) != data[data_row]["date"])
+  {
+    SliderDate = new Date(reqDate(h).slice(0,4),reqDate(h).slice(5,7),reqDate(h).slice(8,10));
+    DataDate = new Date(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
 
-function update(h) {
+    if(DataDate < SliderDate)
+    {
+      while(DataDate < SliderDate)
+      { 
+        data_row += 1;
+        DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
+      }
+    }
+    else if(DataDate > SliderDate)
+    {
+      while(DataDate >= SliderDate)
+      {
+        data_row -= 1;
+        DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
+      }
+      data_row += 1
+
+    }
+  }
+  if(reqDate(h) == data[data_row]["date"])
+  {
+    start = data_row
+    while(reqDate(h) == data[data_row]["date"])
+      data_row += 1
+    end = data_row
+    if(mode == 0)
+      add(start,end)
+    else
+      tempadd(start,end)
+  }
+}
+
+function update(h,mode=0) {
   // update position and text of label according to slider scale
   handle.attr("cx", x(h));
   label
     .attr("x", x(h))
     .text(()=>{
-        if(reqDate(h) != data[data_row]["date"])
-        {
-          SliderDate = new Date(reqDate(h).slice(0,4),reqDate(h).slice(5,7),reqDate(h).slice(8,10));
-          DataDate = new Date(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
-
-          if(DataDate < SliderDate)
-          {
-            while(DataDate < SliderDate)
-            { 
-              data_row += 1;
-              DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
-            }
-          }
-          else if(DataDate > SliderDate)
-          {
-            while(DataDate >= SliderDate)
-            {
-              data_row -= 1;
-              DataDate.setFullYear(data[data_row]["date"].slice(0,4),data[data_row]["date"].slice(5,7),data[data_row]["date"].slice(8,10));
-            }
-            data_row += 1
-
-          }
-        }
-        if(reqDate(h) == data[data_row]["date"])
-        {
-          start = data_row
-          while(reqDate(h) == data[data_row]["date"])
-            data_row += 1
-          end = data_row
-          add(start,end)
-        }
-        return formatDate(h)});
+        datasplit(h,mode)
+        return reqDate(h)});
 }
 
   //     svg.call(d3.zoom()
