@@ -45,7 +45,7 @@ var data = [];
 for (var i = 0; i < 300; i++) {
   var datum = {};
   datum.date = i;
-  datum.price = Math.floor(Math.random() * 600);
+  datum.price = Math.floor(Math.random() * 200);
   data.push(datum);
 }  
   
@@ -64,6 +64,7 @@ var x = d3.scale.ordinal().rangeBands([0, width], .1),
 var xAxis = d3.svg.axis().scale(x).orient("bottom"),
     xAxis2 = d3.svg.axis().scale(x2).orient("bottom").tickValues([]),
     yAxis = d3.svg.axis().scale(y).orient("left");
+    yAxis3 = d3.svg.axis().scale(y3).orient("left");
 
 	x.domain(data.map(function(d){ return d.date}));
 	y.domain([0, d3.max(data, function(d) { return d.price;})]);
@@ -95,12 +96,20 @@ var context = svg.append("g")
   focus.append("g")
       .attr("class", "y axis")
       .call(yAxis);
+
+  focus.append("g")
+      .attr("class", "y axis")
+      .call(yAxis3);
 	 
   console.log(x(data[0].date))
  	enter(data)
   updateScale(data)
+
+  var newContext = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top*1.9 + ")");
   
-  var subBars = context.selectAll('.subBarOne')
+  var subBars = newContext.selectAll('.subBarOne')
                                   	.data(data)
 	
   subBars.enter().append("rect")
@@ -122,7 +131,7 @@ var context = svg.append("g")
         }
       })
 
-      var subBars = context.selectAll('.subBarTwo')
+      var subBars = newContext.selectAll('.subBarTwo')
                                   	.data(data)
 	
   subBars.enter().append("rect")
@@ -144,12 +153,12 @@ var context = svg.append("g")
         }
       })
 
-  context.append("g")
+  newContext.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height2 + ")")
       .call(xAxis2);
 
-  context.append("g")
+  newContext.append("g")
       .attr("class", "x brush")
       .call(brush)
     .selectAll("rect")
@@ -197,6 +206,7 @@ function brushed() {
 
     focus.select(".x.axis").call(xAxis.tickValues(filteredTickValues));
     focus.select(".y.axis").call(yAxis);
+    // focus.select(".y.axis").call(yAxis3)
   }
   
   function update(data)
