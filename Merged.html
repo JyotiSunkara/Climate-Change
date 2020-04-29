@@ -70,7 +70,7 @@
 
 <body>
   <div id="vis">
-    <button id="play-button">Play</button>
+    <button id="play-button" style = "left:460px;">Play</button>
   </div>
 <!-- Create an element where the map will take place -->
 <div id="data">
@@ -96,7 +96,7 @@ var projection = d3.geoMercator()
 
 d3.queue()
   .defer(d3.json, "world.geojson")  // World shape
-  .defer(d3.csv, "CSV/final-data.csv") // Position of circles
+  .defer(d3.csv, "4th-Stage.csv") // Position of circles
   .await(ready);
 
 function ready(error, dataGeo, data) {
