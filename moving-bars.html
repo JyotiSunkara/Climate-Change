@@ -7,17 +7,13 @@ svg {
 }
 
 
-.barUp {
-  fill: deepskyblue;
-  clip-path: url(#clip);
-}
-.barDown {
+.bar {
   fill: royalblue;
   clip-path: url(#clip);
 }
   
-.subBarOne, .subBarTwo { 
-  fill: plum;
+.subBar { 
+  fill: gray;
   opacity: 0.5;
 }
 
@@ -30,7 +26,7 @@ svg {
 
 .brush .extent {
   stroke: #fff;
-  fill: grey;
+  fill: steelblue;
   fill-opacity: .25;
   shape-rendering: crispEdges;
 }
@@ -42,11 +38,10 @@ svg {
   
 var data = [];
 
-// Dummy data 
 for (var i = 0; i < 300; i++) {
   var datum = {};
   datum.date = i;
-  datum.price = Math.floor(Math.random() * 200);
+  datum.price = Math.floor(Math.random() * 600);
   data.push(datum);
 }  
   
@@ -60,18 +55,15 @@ var x = d3.scale.ordinal().rangeBands([0, width], .1),
     x2 = d3.scale.ordinal().rangeBands([0, width], .1),
     y = d3.scale.linear().range([height, 0]),
     y2 = d3.scale.linear().range([height2, 0]);
-    y3 = d3.scale.linear().range([0, height])
 
 var xAxis = d3.svg.axis().scale(x).orient("bottom"),
     xAxis2 = d3.svg.axis().scale(x2).orient("bottom").tickValues([]),
     yAxis = d3.svg.axis().scale(y).orient("left");
-    yAxis3 = d3.svg.axis().scale(y3).orient("left");
 
-	x.domain(data.map(function(d){ return d.date}));
-	y.domain([0, d3.max(data, function(d) { return d.price;})]);
-    y3.domain([0, d3.max(data, function(d) { return d.price;})]);
+		x.domain(data.map(function(d){ return d.date}));
+	  y.domain([0, d3.max(data, function(d) { return d.price;})]);
   	x2.domain(x.domain());
-	y2.domain(y.domain());
+	  y2.domain(y.domain());
 		
   var brush = d3.svg.brush()
 							  .x(x2) 
@@ -79,7 +71,7 @@ var xAxis = d3.svg.axis().scale(x).orient("bottom"),
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", 4*height + margin.top + margin.bottom);
+    .attr("height", height + margin.top + margin.bottom);
 
 var focus = svg.append("g")
     .attr("class", "focus")
@@ -97,24 +89,16 @@ var context = svg.append("g")
   focus.append("g")
       .attr("class", "y axis")
       .call(yAxis);
-
-  focus.append("g")
-      .attr("class", "y axis")
-      .call(yAxis3);
 	 
   console.log(x(data[0].date))
  	enter(data)
   updateScale(data)
-
-  var newContext = svg.append("g")
-    .attr("class", "context")
-    .attr("transform", "translate(" + margin2.left + "," + margin2.top*1.9 + ")");
   
-  var subBars = newContext.selectAll('.subBarOne')
+  var subBars = context.selectAll('.subBar')
                                   	.data(data)
 	
   subBars.enter().append("rect")
-		  .classed('subBarOne', true)
+		  .classed('subBar', true)
 			.attr(
     	{
         height: function (d)
@@ -132,39 +116,20 @@ var context = svg.append("g")
         }
       })
 
-      var subBars = newContext.selectAll('.subBarTwo')
-                                  	.data(data)
-	
-  subBars.enter().append("rect")
-		  .classed('subBarTwo', true)
-			.attr(
-    	{
-        height: function (d)
-        {
-          return height2 - y2(d.price);
-        },
-        width: function(d){ return x.rangeBand()},
-        x: function(d) {
-
-          return x2(d.date);
-        },
-        y: function(d)
-        {
-          return height2
-        }
-      })
-
-  newContext.append("g")
+  context.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height2 + ")")
       .call(xAxis2);
 
-  newContext.append("g")
+  context.append("g")
       .attr("class", "x brush")
       .call(brush)
     .selectAll("rect")
       .attr("y", -6)
       .attr("height", height2 + 7);
+  
+
+
 
 function brushed() {
     var selected = null; 
@@ -172,8 +137,10 @@ function brushed() {
                 .filter(function(d){
                  		return (brush.extent()[0] <= x2(d)) && (x2(d) <= brush.extent()[1]);
 							});
+  
     var start;
     var end;
+		
   	if(brush.extent()[0] != brush.extent()[1])
       {
         start = selected[0];
@@ -207,16 +174,14 @@ function brushed() {
 
     focus.select(".x.axis").call(xAxis.tickValues(filteredTickValues));
     focus.select(".y.axis").call(yAxis);
-    // focus.select(".y.axis").call(yAxis3)
   }
   
   function update(data)
   {
 		  x.domain(data.map(function(d){ return d.date}));
 		  y.domain([0, d3.max(data, function(d) { return d.price;})]);
-		  y3.domain([0, d3.max(data, function(d) { return d.price;})]);
 
-      var bars =  focus.selectAll('.barUp')
+      var bars =  focus.selectAll('.bar')
           .data(data)
       bars
         .attr(
@@ -235,28 +200,6 @@ function brushed() {
           y: function(d)
           {
             return y(d.price)
-          }
-        })
-
-        var bars =  focus.selectAll('.barDown')
-          .data(data)
-      bars
-      .attr(
-        {  
-          height: function (d, i)
-          { 
-            return height - y3(d.price);
-          },
-          width: function(d){ 
-            return x.rangeBand()
-          },
-          x: function(d) {
- 
-            return x(d.date);
-          },
-          y: function(d)
-          {
-            return height
           }
         })
 
@@ -264,24 +207,19 @@ function brushed() {
   
   function exit(data)
   {
-		var bars =  focus.selectAll('.barUp').data(data)
+		var bars =  focus.selectAll('.bar').data(data)
 		bars.exit().remove()
-
-        var bars =  focus.selectAll('.barDown').data(data)
-		bars.exit().remove()
-
   }
   
   function enter(data)
   {
     	x.domain(data.map(function(d){ return d.date}));
-		y.domain([0, d3.max(data, function(d) { return d.price;})]);
-		y3.domain([0, d3.max(data, function(d) { return d.price;})]);
+		  y.domain([0, d3.max(data, function(d) { return d.price;})]);
 
-      var bars =  focus.selectAll('.barUp')
+      var bars =  focus.selectAll('.bar')
           .data(data)
       bars.enter().append("rect")
-        .classed('barUp', true)
+        .classed('bar', true)
         .attr(
         {  
           height: function (d, i)
@@ -300,28 +238,6 @@ function brushed() {
             return y(d.price)
           }
         })
-
-        bars.enter().append("rect")
-        .classed('barDown', true)
-        .attr(
-        {  
-          height: function (d, i)
-          { 
-            return height - y3(d.price);
-          },
-          width: function(d){ 
-            return x.rangeBand()
-          },
-          x: function(d) {
- 
-            return x(d.date);
-          },
-          y: function(d)
-          {
-            return height
-          }
-        })
-
   }
 
 </script>

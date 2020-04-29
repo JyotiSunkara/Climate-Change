@@ -104,6 +104,8 @@
     bindDatePicker();
   });
 
+  
+
 </script>
 
 
@@ -126,8 +128,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label} - #percent%",
-          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          indexLabel: "{label}: {y}",
+          toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             { y: 100, label: "first", color: "gold"},
             { y: 55, label: "second", color: "yellow"}
@@ -152,8 +154,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label} - #percent%",
-          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          indexLabel: "{label}: {y}",
+          toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             {  y: 71, label: "first", color: "aqua"},
             {  y: 55, label: "second", color: "dodgerblue"},
@@ -183,16 +185,16 @@
           console.log(typeof(value))
           console.log((parseFloat(value[0])))
           chartOne.data[0].dataPoints[0].y = parseFloat(value[0])
-          chartOne.data[0].dataPoints[0].label = "max"
+          chartOne.data[0].dataPoints[0].label = "Maximum recorded"
 
           chartOne.data[0].dataPoints[1].y = parseFloat(value[2])
-          chartOne.data[0].dataPoints[1].label = "average"
+          chartOne.data[0].dataPoints[1].label = "Average of the Month"
 
           chartTwo.data[0].dataPoints[0].y = parseFloat(value[1])
-          chartTwo.data[0].dataPoints[0].label = "min"
+          chartTwo.data[0].dataPoints[0].label = "Minimum recorded"
 
           chartTwo.data[0].dataPoints[1].y = parseFloat(value[2])
-          chartTwo.data[0].dataPoints[1].label = "average"
+          chartTwo.data[0].dataPoints[1].label = "Average of the Month"
 
           chartOne.render()
           chartTwo.render()
