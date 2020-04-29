@@ -109,6 +109,7 @@
 
 <!------------------------------------ Donuts ---------------------------------------->
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
+<script src="http://d3js.org/d3.v3.js"></script>
 <script type = "text/javascript">
     window.onload = function () {
       var chartOne = new CanvasJS.Chart("chartContainerOne",
@@ -162,14 +163,11 @@
       });
   
       chartTwo.render();
-    }
+    
 
 
-</script>
 
-<!------------------------------------ Dropdown ---------------------------------------->
-<script src="http://d3js.org/d3.v3.js"></script>
-<script>
+// <script>
     d3.csv("CSV/dummy.csv", function(error, data) {
       var selection = d3.select(".dropdead")
         .append("div")
@@ -179,16 +177,34 @@
       selection
         .on("change", function(d) {
           var value = d3.select(this).property("value");
-          alert(value);
+          console.log(chartOne.data[0].dataPoints[0].y)
+          console.log(typeof(parseFloat(value[0])))
+          chartOne.data[0].dataPoints[0].y = parseFloat(value[0])
+          chartOne.data[0].dataPoints[0].label = "max"
+
+          chartOne.data[0].dataPoints[1].y = parseFloat(value[2])
+          chartOne.data[0].dataPoints[1].label = "average"
+
+          chartTwo.data[0].dataPoints[0].y = parseFloat(value[1])
+          chartTwo.data[0].dataPoints[0].label = "min"
+
+          chartTwo.data[0].dataPoints[1].y = parseFloat(value[2])
+          chartTwo.data[0].dataPoints[1].label = "average"
+
+          chartOne.render()
+          // chartTwo.update()
+          
         });
   
       selection.selectAll("option")
         .data(data)
         .enter()
           .append("option")
-          .attr("value", function (d) { return d.code; })
+          .attr("value", function (d) { 
+            return [d.max,d.min,d.average]; })
           .text(function (d) { return d.city; });
     });
+    }
     </script>
 <body>
 <div id="chartContainerOne"  style="height: 300px; width: 500px; display: inline-block;"> -->

@@ -1,5 +1,5 @@
-city,code,date,max,min
-Bangalore,A123,2020/03/14,60,10
-China,A123,2020/03/15,60,10
-Japan,A145,2020/03/16,20,10
-America,A145,2020/03/17,28,10
+city,code,date,max,min,average
+Bangalore,A123,2020/03/14,60,10,20
+China,A123,2020/03/15,60,10,30
+Japan,A145,2020/03/16,20,10,40
+America,A145,2020/03/17,28,10,50
