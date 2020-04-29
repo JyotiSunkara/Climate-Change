@@ -58,38 +58,6 @@
   </script>
  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
- <script>
-      // Handler for dropdown value change
-      var dropdownChange = function() {
-                    var newCereal = d3.select(this).property('value'),
-                        newData   = cerealMap[newCereal];
-
-                    updateBars(newData);
-                };
-
-                // Get names of cereals, for dropdown
-                var cereals = Object.keys(cerealMap).sort();
-
-                var dropdown = d3.select("#vis-container")
-                    .insert("select", "svg")
-                    .on("change", dropdownChange);
-
-                dropdown.selectAll("option")
-                    .data(cereals)
-                    .enter().append("option")
-                    .attr("value", function (d) { return d; })
-                    .text(function (d) {
-                        return d[0].toUpperCase() + d.slice(1,d.length); // capitalize 1st letter
-                    });
-
-                var initialData = cerealMap[ cereals[0] ];
-                updateBars(initialData);
-            
- </script>
-
-
-
-
 </head>
 <body>
   <div id="chartContainerOne" display: inline-block; style="height: 300px; width: 500px;">
