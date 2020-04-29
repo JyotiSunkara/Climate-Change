@@ -168,7 +168,7 @@
 
 
 // <script>
-    d3.csv("CSV/dummy.csv", function(error, data) {
+    d3.csv("CSV/dummy2.csv", function(error, data) {
       var selection = d3.select(".dropdead")
         .append("div")
         .append("label")
@@ -178,7 +178,10 @@
         .on("change", function(d) {
           var value = d3.select(this).property("value");
           console.log(chartOne.data[0].dataPoints[0].y)
-          console.log(typeof(parseFloat(value[0])))
+          console.log(value)
+          value = value.split(",")
+          console.log(typeof(value))
+          console.log((parseFloat(value[0])))
           chartOne.data[0].dataPoints[0].y = parseFloat(value[0])
           chartOne.data[0].dataPoints[0].label = "max"
 
@@ -192,7 +195,7 @@
           chartTwo.data[0].dataPoints[1].label = "average"
 
           chartOne.render()
-          // chartTwo.update()
+          chartTwo.render()
           
         });
   
@@ -201,7 +204,11 @@
         .enter()
           .append("option")
           .attr("value", function (d) { 
-            return [d.max,d.min,d.average]; })
+            console.log(d)
+            var temp = [parseFloat(d.max),parseFloat(d.min),parseFloat(d.average)]
+            console.log(typeof(temp))
+            console.log(temp)
+            return temp; })
           .text(function (d) { return d.city; });
     });
     }
