@@ -7,8 +7,8 @@ sumMax = 0
 firstMin = 0
 firstMax = 0
 index = 0
-with open('years.csv', 'r') as read_obj, \
-        open('totals.csv', 'w', newline='') as write_obj:
+with open('final-data.csv', 'r') as read_obj, \
+        open('month-values.csv', 'w', newline='') as write_obj:
     # Create a csv.reader object from the input file object
     csv_reader = reader(read_obj)
     # Create a csv.writer object from the output file object
