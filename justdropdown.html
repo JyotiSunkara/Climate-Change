@@ -48,18 +48,18 @@
 <script src="http://d3js.org/d3.v3.js"></script>
 <script>
     d3.csv("CSV/dummy.csv", function(error, data) {
-      var select = d3.select(".dropdead")
+      var selection = d3.select(".dropdead")
         .append("div")
         .append("label")
         .append("select")
   
-      select
+      selection
         .on("change", function(d) {
           var value = d3.select(this).property("value");
           alert(value);
         });
   
-      select.selectAll("option")
+      selection.selectAll("option")
         .data(data)
         .enter()
           .append("option")
