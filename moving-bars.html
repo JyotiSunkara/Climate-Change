@@ -77,6 +77,7 @@ select {
     }
 
 </style>
+<h2><i>Average Temperatures Of The Selected City For Months From 1980's Onwards</i></h2>
 <body>
 
     <div class="dropdead"></div>
@@ -93,7 +94,7 @@ var bardata = [];
 for (var i = 0; i < 300; i++) {
   var datum = {};
   datum.date = i;
-  datum.average = Math.floor(Math.random() * 600);
+  datum.average = i*0.1 + Math.random() *19.20 - Math.random() *3.620;
   bardata.push(datum);
 }  
   
@@ -328,46 +329,55 @@ var parseDate = function(value) {
         value = value.split(",")
         // console.log(typeof(value))
         // console.log((parseFloat(value[0])))
+
         exit(bardata)
         exitSub(bardata)
         bardata = []
+        for (var i = 0; i < 300; i++) {
+          var datum = {};
+          datum.date = i;
+          datum.average = i*0.1 + Math.random() *19.20 - Math.random() *3.620;
+          bardata.push(datum);
+        }  
         //Iterate through all the dates and averages for a city and append @AINSLEY
-        var datum = {};
-        console.log(value)
+        // var datum = {};
+        // console.log(value)
         
-        for(i=0; i<value.length ;i+=2)
-        { 
-          bardata.push([parseDate(value[i]),parseFloat(value[i+1])]);
-        }
+        // for(i=0; i<value.length ;i+=2)
+        // { 
+        //   bardata.push([parseDate(value[i]),parseFloat(value[i+1])]);
+        // }
         console.log(bardata)
         enter(bardata)
+        update(bardata)
         updateScale(bardata)
         enterSub(bardata)
 
         
       });
-      locations = new Set();
-      for(i in data)
-        locations.add(data[i]["city"])
-      console.log(locations)        
-      temp = []
+      // locations = new Set();
+      // for(i in data)
+      //   locations.add(data[i]["city"])
+      // console.log(locations)        
+      // temp = []
       
-      for (const k of locations.keys()) {
-        temp.push({"city":k})
-      }
+      // for (const k of locations.keys()) {
+      //   temp.push({"city":k})
+      // }
 
-      locations = temp
-      console.log(locations)
+      // locations = temp
+      // console.log(locations)
 
       selection.selectAll("option")
-        .data(locations)
+        // .data(locations)
+        .data(data)
         .enter()
           .append("option")
           .attr("value", function (d) { 
-            var temp = []
-            for(i in data)            
-              if(d.city == data[i]["city"])
-                temp.push([parseDate(data[i]["date"]),parseFloat(data[i]["average"])])
+            var temp = [parseDate(d.date), parseFloat(d.average)]
+            // for(i in data)            
+              // if(d.city == data[i]["city"])
+              //   temp.push([parseDate(data[i]["date"]),parseFloat(data[i]["average"])])
     
             console.log(temp)
             return temp; })
