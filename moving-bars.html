@@ -330,6 +330,7 @@ var parseDate = function(value) {
         exit(bardata)
         exitSub(bardata)
         bardata = []
+        //Iterate through all the dates and averages for a city and append @AINSLEY
         var datum = {};
         datum.date = parseFloat(value[0]);
         datum.average = parseFloat(value[1]);
@@ -349,6 +350,7 @@ var parseDate = function(value) {
           .attr("value", function (d) { 
             // console.log(d)
             var temp = [parseDate(d.date),parseFloat(d.average)]
+            //Temp must be all the dates and averages for a city @AINSLEY
             // console.log(typeof(temp))
             console.log(temp)
             return temp; })
