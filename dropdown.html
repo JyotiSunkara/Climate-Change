@@ -59,63 +59,10 @@
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
 <script src="http://d3js.org/d3.v3.js"></script>
 <script>
-<<<<<<< HEAD
     var selecteddate;
     var selectedcity = "BUNTZEN LAKE";
     var globaldata;
       
-=======
-    $(function () {
-    var bindDatePicker = function() {
-         $(".date").datetimepicker({
-         format:'YYYY/MM/DD',
-             icons: {
-                 time: "fa fa-clock-o",
-                 date: "fa fa-calendar",
-                 up: "fa fa-arrow-up",
-                 down: "fa fa-arrow-down"
-             }
-         }).find('input:first').on("blur",function () {
-             // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
-             // update the format if it's yyyy-mm-dd
-             var date = parseDate($(this).val());
- 
-             if (! isValidDate(date)) {
-                 //create date based on momentjs (we have that)
-                 date = moment().format('YYYY/MM/DD');
-             }
- 
-             $(this).val(date);
-         });
-     }
-    
-    var isValidDate = function(value, format) {
-         format = format || false;
-         // lets parse the date to the best of our knowledge
-         if (format) {
-             value = parseDate(value);
-         }
- 
-         var timestamp = Date.parse(value);
- 
-         return isNaN(timestamp) == false;
-    }
-    
-    var parseDate = function(value) {
-         var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
-         if (m)
-             value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
- 
-         return value;
-    }
-    
-    bindDatePicker();
-  });
-
-  
-
-</script>
->>>>>>> 2da3ddb40dfcaef9b50127f585c0e431781d0c3d
 
 
     window.onload = function () {
@@ -133,8 +80,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label}: {y}",
-          toolTipContent: "<b>{label}:</b> {y}",
+          indexLabel: "{label} - #percent%",
+          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
           dataPoints: [
             { y: "Na", label: "first", color: "gold"},
             { y: "na", label: "second", color: "yellow"}
@@ -159,8 +106,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label}: {y}",
-          toolTipContent: "<b>{label}:</b> {y}",
+          indexLabel: "{label} - #percent%",
+          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
           dataPoints: [
             {  y: "NA", label: "first", color: "aqua"},
             {  y: "NA", label: "second", color: "dodgerblue"},
@@ -262,33 +209,9 @@
   
       selection
         .on("change", function(d) {
-<<<<<<< HEAD
           selectedcity = d3.select(this).property("value") 
           // if(selecteddate != undefined)
             update(selectedcity,selecteddate)
-=======
-          var value = d3.select(this).property("value");
-          console.log(chartOne.data[0].dataPoints[0].y)
-          console.log(value)
-          value = value.split(",")
-          console.log(typeof(value))
-          console.log((parseFloat(value[0])))
-          chartOne.data[0].dataPoints[0].y = parseFloat(value[0])
-          chartOne.data[0].dataPoints[0].label = "Maximum recorded"
-
-          chartOne.data[0].dataPoints[1].y = parseFloat(value[2])
-          chartOne.data[0].dataPoints[1].label = "Average of the Month"
-
-          chartTwo.data[0].dataPoints[0].y = parseFloat(value[1])
-          chartTwo.data[0].dataPoints[0].label = "Minimum recorded"
-
-          chartTwo.data[0].dataPoints[1].y = parseFloat(value[2])
-          chartTwo.data[0].dataPoints[1].label = "Average of the Month"
-
-          chartOne.render()
-          chartTwo.render()
-          
->>>>>>> 2da3ddb40dfcaef9b50127f585c0e431781d0c3d
         });
   
       selection.selectAll("option")
