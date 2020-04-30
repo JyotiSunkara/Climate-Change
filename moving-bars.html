@@ -13,8 +13,8 @@ svg {
 }
   
 .subBar { 
-  fill: gray;
-  opacity: 0.5;
+  fill: black;
+  opacity: 1;
 }
 
 .axis path,
@@ -84,13 +84,17 @@ select {
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
   
-var data = [];
+var bardata = [];
+// var datum = {}
+// datum.date = 0
+// datum.average = 0
+// bardata.push(datum)
 
 for (var i = 0; i < 300; i++) {
   var datum = {};
   datum.date = i;
-  datum.price = Math.floor(Math.random() * 600);
-  data.push(datum);
+  datum.average = Math.floor(Math.random() * 600);
+  bardata.push(datum);
 }  
   
 var margin = {top: 10, right: 10, bottom: 100, left: 40},
@@ -108,8 +112,8 @@ var xAxis = d3.svg.axis().scale(x).orient("bottom"),
     xAxis2 = d3.svg.axis().scale(x2).orient("bottom").tickValues([]),
     yAxis = d3.svg.axis().scale(y).orient("left");
 
-		x.domain(data.map(function(d){ return d.date}));
-	  y.domain([0, d3.max(data, function(d) { return d.price;})]);
+		x.domain(bardata.map(function(d){ return d.date}));
+	  y.domain([0, d3.max(bardata, function(d) { return d.average;})]);
   	x2.domain(x.domain());
 	  y2.domain(y.domain());
 		
@@ -138,31 +142,10 @@ var context = svg.append("g")
       .attr("class", "y axis")
       .call(yAxis);
 	 
-  console.log(x(data[0].date))
- 	enter(data)
-  updateScale(data)
-  
-  var subBars = context.selectAll('.subBar')
-                                  	.data(data)
-	
-  subBars.enter().append("rect")
-		  .classed('subBar', true)
-			.attr(
-    	{
-        height: function (d)
-        {
-          return height2 - y2(d.price);
-        },
-        width: function(d){ return x.rangeBand()},
-        x: function(d) {
-
-          return x2(d.date);
-        },
-        y: function(d)
-        {
-          return y2(d.price)
-        }
-      })
+  console.log(x(bardata[0].date))
+ 	enter(bardata)
+  updateScale(bardata)
+  enterSub(bardata)
 
   context.append("g")
       .attr("class", "x axis")
@@ -195,10 +178,10 @@ function brushed() {
 		  	end = selected[selected.length - 1] + 1;
       } else { 
 				start = 0;
-				end = data.length;
+				end = bardata.length;
       }
 
-    var updatedData = data.slice(start, end);
+    var updatedData = bardata.slice(start, end);
 
     update(updatedData);
     enter(updatedData);
@@ -208,9 +191,9 @@ function brushed() {
 
 }
  
-  function updateScale(data)
+  function updateScale(bardata)
   { 
-    		var tickScale = d3.scale.pow().range([data.length / 10, 0]).domain([data.length, 0]).exponent(.5)
+    		var tickScale = d3.scale.pow().range([bardata.length / 10, 0]).domain([bardata.length, 0]).exponent(.5)
 
     var brushValue = brush.extent()[1] - brush.extent()[0];
     if(brushValue === 0){
@@ -218,25 +201,25 @@ function brushed() {
     }
 
     var tickValueMultiplier = Math.ceil(Math.abs(tickScale(brushValue)));  
-  	var filteredTickValues = data.filter(function(d, i){return i % tickValueMultiplier === 0}).map(function(d){ return d.date})
+  	var filteredTickValues = bardata.filter(function(d, i){return i % tickValueMultiplier === 0}).map(function(d){ return d.date})
 
     focus.select(".x.axis").call(xAxis.tickValues(filteredTickValues));
     focus.select(".y.axis").call(yAxis);
   }
   
-  function update(data)
+  function update(bardata)
   {
-		  x.domain(data.map(function(d){ return d.date}));
-		  y.domain([0, d3.max(data, function(d) { return d.price;})]);
+		  x.domain(bardata.map(function(d){ return d.date}));
+		  y.domain([0, d3.max(bardata, function(d) { return d.average;})]);
 
       var bars =  focus.selectAll('.bar')
-          .data(data)
+          .data(bardata)
       bars
         .attr(
         {  
           height: function (d, i)
           { 
-            return height - y(d.price);
+            return height - y(d.average);
           },
           width: function(d){ 
             return x.rangeBand()
@@ -247,32 +230,32 @@ function brushed() {
           },
           y: function(d)
           {
-            return y(d.price)
+            return y(d.average)
           }
         })
 
   } 
   
-  function exit(data)
+  function exit(bardata)
   {
-		var bars =  focus.selectAll('.bar').data(data)
+		var bars =  focus.selectAll('.bar').data(bardata)
 		bars.exit().remove()
   }
   
-  function enter(data)
+  function enter(bardata)
   {
-    	x.domain(data.map(function(d){ return d.date}));
-		  y.domain([0, d3.max(data, function(d) { return d.price;})]);
+    	x.domain(bardata.map(function(d){ return d.date}));
+		  y.domain([0, d3.max(bardata, function(d) { return d.average;})]);
 
       var bars =  focus.selectAll('.bar')
-          .data(data)
+          .data(bardata)
       bars.enter().append("rect")
         .classed('bar', true)
         .attr(
         {  
           height: function (d, i)
           { 
-            return height - y(d.price);
+            return height - y(d.average);
           },
           width: function(d){ 
             return x.rangeBand()
@@ -283,9 +266,41 @@ function brushed() {
           },
           y: function(d)
           {
-            return y(d.price)
+            return y(d.average)
           }
         })
+  }
+
+  function enterSub(bardata) {
+    console.log(bardata)
+    var subBars = context.selectAll('.subBar')
+                                  	.data(bardata)
+	
+    subBars.enter().append("rect")
+        .classed('subBar', true)
+        .attr(
+        {
+          height: function (d)
+          {
+            return height2 - y2(d.average);
+          },
+          width: function(d){ return x.rangeBand()},
+          x: function(d) {
+
+            return x2(d.date);
+          },
+          y: function(d)
+          {
+            return y2(d.average)
+          }
+        })
+  }
+
+  function exitSub(bardata)
+  {
+		var bars =  context.selectAll('.subBar').data(bardata)
+		bars.exit().remove()
+    console.log("Removed")
   }
 
 </script>
@@ -299,14 +314,34 @@ function brushed() {
     selection
       .on("change", function(d) {
         var value = d3.select(this).property("value");
-        alert(value);
-      });
+        value = value.split(",")
+        // console.log(typeof(value))
+        // console.log((parseFloat(value[0])))
+        exit(bardata)
+        exitSub(bardata)
+        bardata = []
+        var datum = {};
+        datum.date = parseFloat(value[0]);
+        datum.average = parseFloat(value[1]);
+        bardata.push(datum);
+        // console.log(bardata)
+        enter(bardata)
+        updateScale(bardata)
+        enterSub(bardata)
 
-    selection.selectAll("option")
-      .data(data)
-      .enter()
-        .append("option")
-        .attr("value", function (d) { return d.code; })
-        .text(function (d) { return d.city; });
+        
+      });
+      // console.log(bardata)
+      selection.selectAll("option")
+        .data(data)
+        .enter()
+          .append("option")
+          .attr("value", function (d) { 
+            // console.log(d)
+            var temp = [parseFloat(d.max),parseFloat(d.min),parseFloat(d.average)]
+            // console.log(typeof(temp))
+            // console.log(temp)
+            return temp; })
+          .text(function (d) { return d.city; });
   });
   </script>
