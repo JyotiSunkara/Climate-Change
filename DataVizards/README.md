@@ -3,7 +3,7 @@ Data visualization to find climate change buried in millions of data points obta
 
 ## Getting Started
 
-Enter the directory containing the code and procced to run the following command:
+Enter the directory containing the code and proceed to run the following command:
 
 ```
     http-server --cors
