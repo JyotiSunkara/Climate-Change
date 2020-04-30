@@ -316,6 +316,7 @@ var parseDate = function(value) {
 
 
   d3.csv("CSV/dummy.csv", function(error, data) {
+    console.log(data)
     var selection = d3.select(".dropdead")
       .append("div")
       .append("label")
@@ -332,26 +333,42 @@ var parseDate = function(value) {
         bardata = []
         //Iterate through all the dates and averages for a city and append @AINSLEY
         var datum = {};
-        datum.date = parseFloat(value[0]);
-        datum.average = parseFloat(value[1]);
-        bardata.push(datum);
-        // console.log(bardata)
+        console.log(value)
+        
+        for(i=0; i<value.length ;i+=2)
+        { 
+          bardata.push([parseDate(value[i]),parseFloat(value[i+1])]);
+        }
+        console.log(bardata)
         enter(bardata)
         updateScale(bardata)
         enterSub(bardata)
 
         
       });
-      // console.log(bardata)
+      locations = new Set();
+      for(i in data)
+        locations.add(data[i]["city"])
+      console.log(locations)        
+      temp = []
+      
+      for (const k of locations.keys()) {
+        temp.push({"city":k})
+      }
+
+      locations = temp
+      console.log(locations)
+
       selection.selectAll("option")
-        .data(data)
+        .data(locations)
         .enter()
           .append("option")
           .attr("value", function (d) { 
-            // console.log(d)
-            var temp = [parseDate(d.date),parseFloat(d.average)]
-            //Temp must be all the dates and averages for a city @AINSLEY
-            // console.log(typeof(temp))
+            var temp = []
+            for(i in data)            
+              if(d.city == data[i]["city"])
+                temp.push([parseDate(data[i]["date"]),parseFloat(data[i]["average"])])
+    
             console.log(temp)
             return temp; })
           .text(function (d) { return d.city; });
