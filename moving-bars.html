@@ -305,6 +305,16 @@ function brushed() {
 
 </script>
 <script>
+
+var parseDate = function(value) {
+         var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+         if (m)
+             value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+ 
+         return value;
+    }
+
+
   d3.csv("CSV/dummy.csv", function(error, data) {
     var selection = d3.select(".dropdead")
       .append("div")
@@ -338,9 +348,9 @@ function brushed() {
           .append("option")
           .attr("value", function (d) { 
             // console.log(d)
-            var temp = [parseFloat(d.max),parseFloat(d.min),parseFloat(d.average)]
+            var temp = [parseDate(d.date),parseFloat(d.average)]
             // console.log(typeof(temp))
-            // console.log(temp)
+            console.log(temp)
             return temp; })
           .text(function (d) { return d.city; });
   });
