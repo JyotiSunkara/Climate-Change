@@ -4,6 +4,7 @@
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
+<h3><i>Number of max and min records set per month after 1980(Rate Graph)</i></h3>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
@@ -26,7 +27,7 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("CSV/months.csv",function(data) {
+d3.csv("../CSV/months.csv",function(data) {
 
   // Add X axis --> it is a date format
   var x = d3.scaleLinear()

@@ -4,6 +4,7 @@
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
+<h3><i>Total number of max and min records broken as a function of time</i></h3>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
@@ -13,7 +14,7 @@
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 1860 - margin.left - margin.right,
+    width = 1260 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -26,11 +27,11 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("CSV/weeks.csv",function(data) {
+d3.csv("../CSV/totals.csv",function(data) {
 
   // Add X axis --> it is a date format
   var x = d3.scaleLinear()
-    .domain([0,2630])
+    .domain([1970,2020])
     .range([ 0, width ]);
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -38,7 +39,7 @@ d3.csv("CSV/weeks.csv",function(data) {
 
   // Add Y axis
   var y = d3.scaleLinear()
-    .domain([0, 3500])
+    .domain([0, 300000])
     .range([ height, 0 ]);
   svg.append("g")
     .call(d3.axisLeft(y));
@@ -46,7 +47,7 @@ d3.csv("CSV/weeks.csv",function(data) {
   // This allows to find the closest X index of the mouse:
   var bisect = d3.bisector(function(d) { 
     // console.log(d)
-    return parseInt(d.week); }).left;
+    return parseInt(d.year) + 1970; }).left;
 
   // Create the circle that travels along the curve of chart
   var focus = svg
@@ -89,7 +90,7 @@ d3.csv("CSV/weeks.csv",function(data) {
   //     .attr('r', 2.5)
   //     .style("opacity", 0)
 
-  // Create the text that travels along the curve of chart
+  // // Create the text that travels along the curve of chart
   // var focusText3 = svg
   //   .append('g')
   //   .append('text')
@@ -116,7 +117,7 @@ d3.csv("CSV/weeks.csv",function(data) {
     .attr("stroke", "red")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-      .x(function(d) { return x(parseInt(d.week)) })
+      .x(function(d) { return x(parseInt(d.year) + 1970) })
       .y(function(d) { return y(parseInt(d.max)) })
       )
   
@@ -127,7 +128,7 @@ d3.csv("CSV/weeks.csv",function(data) {
     .attr("stroke", "cyan")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-      .x(function(d) { return x(parseInt(d.week)) })
+      .x(function(d) { return x(parseInt(d.year) + 1970) })
       .y(function(d) { return y(parseInt(d.min)) })
       )
   
@@ -138,7 +139,7 @@ d3.csv("CSV/weeks.csv",function(data) {
   //   .attr("stroke", "purple")
   //   .attr("stroke-width", 1.5)
   //   .attr("d", d3.line()
-  //     .x(function(d) { return x(parseInt(d.week)) })
+  //     .x(function(d) { return x(parseInt(d.year) + 1970) })
   //     .y(function(d) { return y(parseInt(d.min) + parseInt(d.max)) })
   //     )
 
@@ -149,8 +150,8 @@ d3.csv("CSV/weeks.csv",function(data) {
     focusText.style("opacity",1)
     focus2.style("opacity", 1)
     focusText2.style("opacity",1)
-    // focus3.style("opacity", 1)
-    // focusText3.style("opacity",1)
+    focus3.style("opacity", 1)
+    focusText3.style("opacity",1)
   }
 
   function mousemove() {
@@ -161,25 +162,25 @@ d3.csv("CSV/weeks.csv",function(data) {
     selectedData = data[i]
     console.log(selectedData)
     focus
-      .attr("cx", x(parseInt(selectedData.week) ))
+      .attr("cx", x(parseInt(selectedData.year) + 1970))
       .attr("cy", y(parseInt(selectedData.max)))
     focusText
-      .html("week:" + (parseInt(selectedData.week) ) +"  -  " + "max:" + parseInt(selectedData.max))
-      .attr("x", x(parseInt(selectedData.week) )+15)
+      .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "max:" + parseInt(selectedData.max))
+      .attr("x", x(parseInt(selectedData.year) + 1970)+15)
       .attr("y", y(parseInt(selectedData.max)))
     focus2
-      .attr("cx", x(parseInt(selectedData.week) ))
+      .attr("cx", x(parseInt(selectedData.year) + 1970))
       .attr("cy", y(parseInt(selectedData.min)))
     focusText2
-      .html("week:" + (parseInt(selectedData.week) ) +"  -  " + "min:" + parseInt(selectedData.min))
-      .attr("x", x(parseInt(selectedData.week) )+15)
+      .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "min:" + parseInt(selectedData.min))
+      .attr("x", x(parseInt(selectedData.year) + 1970)+15)
       .attr("y", y(parseInt(selectedData.min)))
     // focus3
-    //   .attr("cx", x(parseInt(selectedData.week) ))
+    //   .attr("cx", x(parseInt(selectedData.year) + 1970))
     //   .attr("cy", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
     // focusText3
-    //   .html("week:" + (parseInt(selectedData.week) ) +"  -  " + "total:" + (parseInt(selectedData.min) + parseInt(selectedData.max)))
-    //   .attr("x", x(parseInt(selectedData.week) )+15)
+    //   .html("year:" + (parseInt(selectedData.year) + 1970) +"  -  " + "total:" + (parseInt(selectedData.min) + parseInt(selectedData.max)))
+    //   .attr("x", x(parseInt(selectedData.year) + 1970)+15)
     //   .attr("y", y(parseInt(selectedData.min) + parseInt(selectedData.max)))
 }
   

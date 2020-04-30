@@ -60,7 +60,7 @@
 <script src="http://d3js.org/d3.v3.js"></script>
 <script>
     var selecteddate;
-    var selectedcity = "BUNTZEN LAKE";
+    var selectedcity = "Bangalore";
     var globaldata;
       
 
@@ -80,8 +80,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label} - #percent%",
-          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          indexLabel: "{label}: {y}",
+          toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             { y: "Na", label: "first", color: "gold"},
             { y: "na", label: "second", color: "yellow"}
@@ -106,8 +106,8 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label} - #percent%",
-          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          indexLabel: "{label}: {y}",
+          toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             {  y: "NA", label: "first", color: "aqua"},
             {  y: "NA", label: "second", color: "dodgerblue"},
@@ -199,7 +199,7 @@
     
     bindDatePicker();
     
-    d3.csv("CSV/dummy2.csv", function(error, data) {
+    d3.csv("../CSV/tester.csv", function(error, data) {
       globaldata = data
       console.log(data)
       var selection = d3.select(".dropdead")

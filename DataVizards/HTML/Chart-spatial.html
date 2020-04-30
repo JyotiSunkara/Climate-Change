@@ -69,6 +69,8 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <body>
+  <h1>Map showing the breaking of min and max temperature records over the years from 1980s till present!</h1>
+  <h3><i>Around 40,000 all-time records were set in the last two decades, out of 500 million daily min and max entries.</i></h3>
   <div id="vis">
     <button id="play-button" style = "left:460px;">Play</button>
   </div>
@@ -95,8 +97,8 @@ var projection = d3.geoMercator()
     .translate([ width/2, height/2 ])
 
 d3.queue()
-  .defer(d3.json, "world.geojson")  // World shape
-  .defer(d3.csv, "4th-Stage.csv") // Position of circles
+  .defer(d3.json, "../JSON/world.geojson")  // World shape
+  .defer(d3.csv, "../CSV/4th-Stage.csv") // Position of circles
   .await(ready);
 
 function ready(error, dataGeo, data) {
@@ -189,7 +191,7 @@ function ready(error, dataGeo, data) {
       
       svg.selectAll("circle").append("svg:title")
           .text(function(d, i) { 
-            return "Code: " + d.code + "\n" + "Temperature: " + d.temperature});
+            return "Code: " + d.code + "\n" + "Category: " + d.category + "\n" + "Longitude: " + d.longitude + "\n" + "Lattitude: " + d.latitude + "\n"+ "City: " + d.city + "\n" + "Temperature: " + d.temperature});
     
   }
 
