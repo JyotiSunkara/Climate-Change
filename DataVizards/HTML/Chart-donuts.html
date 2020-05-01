@@ -80,7 +80,7 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label}: {y}",
+          indexLabel: "{label}: {y} degrees celcius",
           toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             { y: "Na", label: "first", color: "gold"},
@@ -106,7 +106,7 @@
           radius: "100%",  //change the radius here. 
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label}: {y}",
+          indexLabel: "{label}: {y} degrees celcius",
           toolTipContent: "<b>{label}:</b> {y}",
           dataPoints: [
             {  y: "NA", label: "first", color: "aqua"},
@@ -126,16 +126,16 @@
         if(city == globaldata[row]["city"] && date == globaldata[row]["date"])
         { 
           chartOne.data[0].dataPoints[0].y = parseFloat(globaldata[row]["max"])
-          chartOne.data[0].dataPoints[0].label = "Maximum"
+          chartOne.data[0].dataPoints[0].label = "Maximum of the day"
 
           chartOne.data[0].dataPoints[1].y = parseFloat(globaldata[row]["average"])
-          chartOne.data[0].dataPoints[1].label = "Average"
+          chartOne.data[0].dataPoints[1].label = "Average of the month"
 
           chartTwo.data[0].dataPoints[0].y = parseFloat(globaldata[row]["min"])
-          chartTwo.data[0].dataPoints[0].label = "Minimum"
+          chartTwo.data[0].dataPoints[0].label = "Minimum of the day"
 
           chartTwo.data[0].dataPoints[1].y = parseFloat(globaldata[row]["average"])
-          chartTwo.data[0].dataPoints[1].label = "Average"
+          chartTwo.data[0].dataPoints[1].label = "Average of the month"
 
           chartOne.render()
           chartTwo.render()
