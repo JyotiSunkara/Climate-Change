@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>  
+  <script type = "text/javascript">
+  window.onload = function () {
+    var chartOne = new CanvasJS.Chart("chartContainerOne",
+    {
+        animationEnabled: true,
+      title:{
+        text: "Maximum", 
+        horizontalAlign: "left"     
+      },
+      data: [
+      {        
+        type: "doughnut",
+        indexLabelPlacement: "outside",        
+        radius: "100%",  //change the radius here. 
+        innerRadius: 60,
+        indexLabelFontSize: 17,
+        indexLabel: "{label} - #percent%",
+        toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+        dataPoints: [
+          { y: 100, label: "first", color: "gold"},
+          { y: 55, label: "second", color: "yellow"}
+        ]
+      }
+      ]
+    });
+
+    chartOne.render();
+    
+    var chartTwo = new CanvasJS.Chart("chartContainerTwo",
+    {
+        animationEnabled: true,
+      title:{
+        text: "Minimum", 
+        horizontalAlign: "left"     
+      },
+      data: [
+      {        
+        type: "doughnut",
+        indexLabelPlacement: "outside",        
+        radius: "100%",  //change the radius here. 
+        innerRadius: 60,
+        indexLabelFontSize: 17,
+        indexLabel: "{label} - #percent%",
+        toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+        dataPoints: [
+          {  y: 71, label: "first", color: "aqua"},
+          {  y: 55, label: "second", color: "dodgerblue"},
+        ]
+      }
+      ]
+    });
+
+    chartTwo.render();
+  }
+  </script>
+ <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+</head>
+<body>
+  <div id="chartContainerOne" display: inline-block; style="height: 300px; width: 500px;">
+  </div>
+  <div id="chartContainerTwo" display: inline-block; style="height: 300px; width: 500px;">
+  </div>
+</body>
+</html>
